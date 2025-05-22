@@ -1,165 +1,150 @@
-:root {
-  --color-bg: #f0f2f5;
-  --color-text: #333;
-  --color-title: #1a202c;
-  --color-border: #4a5568;
-  --color-cell-light: #f7fafc;
-  --color-cell-dark: #e2e8f0;
-  --color-visited: #63b3ed;
-  --color-visited-text: #fff;
-  --color-possible-move-bg: #9ae6b4;
-  --color-possible-move-border: #38a169;
-  --color-btn-bg: #4a5568;
-  --color-btn-hover-bg: #2d3748;
-  --color-success-bg: #c6f6d5;
-  --color-success-text: #2f855a;
-  --color-error-bg: #fed7d7;
-  --color-error-text: #c53030;
-
-  --cell-size: min(10vw, 50px);
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 body {
-  font-family: "Inter", Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif; /* 使用 Inter 字體 */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  padding: 10px;
-  line-height: 1.5;
+  background-color: #f0f2f5; /* 稍微柔和的背景色 */
+  color: #333;
+  padding: 10px; /* 增加一些邊距以適應小螢幕 */
+  box-sizing: border-box;
 }
-
 h1 {
-  color: var(--color-title);
+  color: #1a202c; /* 深灰色標題 */
   margin-bottom: 15px;
   text-align: center;
+}
+.board-size-selector {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+  color: #2d3748;
+}
+.board-size-selector label {
+  font-weight: bold;
+}
+.board-size-selector select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  background-color: #fff;
+  font-size: 0.95em;
+  cursor: pointer;
 }
 
 .board-container {
   display: grid;
-  grid-template-columns: repeat(var(--board-cols, 8), var(--cell-size));
-  grid-template-rows: repeat(var(--board-rows, 8), var(--cell-size));
-  border: 2px solid var(--color-border);
+  /* 使用 CSS 變數和 calc 使其更具響應性 */
+  --cell-size: min(
+    10vw,
+    50px
+  ); /* 單元格大小，最大50px，或視窗寬度的10% (對於小棋盤可以考慮調大) */
+  /* grid-template-columns and rows will be set by JS */
+  border: 2px solid #4a5568; /* 較深的邊框顏色 */
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+  border-radius: 8px; /* 圓角 */
+  overflow: hidden; /* 確保子元素圓角 */
 }
-
 .cell {
   width: var(--cell-size);
   height: var(--cell-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(var(--cell-size) * 0.4);
+  font-size: calc(var(--cell-size) * 0.4); /* 字體大小隨單元格調整 */
   font-weight: bold;
-  border: 1px solid #cbd5e0;
-  user-select: none;
-  transition: background-color 0.2s ease-in-out;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e0; /* 較淺的格子邊框 */
   cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease-in-out; /* 平滑的背景顏色過渡 */
 }
-
 .cell.light {
-  background-color: var(--color-cell-light);
+  background-color: #f7fafc; /* 淺色格子 */
 }
-
 .cell.dark {
-  background-color: var(--color-cell-dark);
+  background-color: #e2e8f0; /* 深色格子 */
 }
-
 .cell.visited {
-  background-color: var(--color-visited);
-  color: var(--color-visited-text);
+  background-color: #63b3ed; /* 已訪問格子的顏色 (藍色系) */
+  color: #ffffff; /* 白色文字 */
 }
-
+.cell.knight {
+  /* 騎士圖標 (SVG) */
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><g fill="none" fill-rule="evenodd" stroke="%232D3748" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47C30.06 24.84 31 23.03 31 21c0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4zm0 0" fill="%23FFFFFF"/><path d="M9 39h27M12 30c0-2.67 1.67-5.17 4-6.33M33 30c0-2.67-1.67-5.17-4-6.33M15 23.5c0-1.02.39-1.94.91-2.63M30 23.5c0-1.02-.39-1.94-.91-2.63" stroke-linecap="butt"/><path d="M22.5 26.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zM22.5 9.5v4M22.5 16.5v3M19.5 12.5h6" fill="%23FFFFFF"/></g></svg>');
+  background-size: 70%; /* 調整圖標大小 */
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.cell.knight.visited {
+  /* 確保騎士圖標在已訪問格子上的可見性 */
+  background-color: #4299e1; /* 騎士訪問過的格子顏色稍深 */
+}
 .cell.possible-move {
-  background-color: var(--color-possible-move-bg) !important;
-  opacity: 0.8;
-  border: 2px dashed var(--color-possible-move-border);
+  background-color: #9ae6b4 !important; /* 淡綠色標示可移動位置 */
+  opacity: 0.8; /* 稍微透明 */
+  border: 2px dashed #38a169; /* 虛線邊框 */
+}
+.controls {
+  margin-top: 15px;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%; /* 新增這行：讓它撐滿容器寬度 */
 }
 
 button {
-  padding: 12px 18px;
-  font-size: 1em;
+  padding: 10px 18px;
+  font-size: 1em; /* 相對字體大小 */
   cursor: pointer;
-  background-color: var(--color-btn-bg);
+  background-color: #4a5568; /* 深灰藍色按鈕 */
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 6px; /* 圓角按鈕 */
   transition: background-color 0.2s ease-in-out, transform 0.1s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 button:hover {
-  background-color: var(--color-btn-hover-bg);
+  background-color: #2d3748; /* 滑鼠懸停時更深的顏色 */
 }
-
 button:active {
-  transform: translateY(1px);
+  transform: translateY(1px); /* 按下時的輕微效果 */
 }
-
-button:focus-visible {
-  outline: 2px solid var(--color-btn-hover-bg);
-  outline-offset: 2px;
-}
-
 .status-message-container {
   width: 100%;
+  /* max-width will be set by JS */
   text-align: center;
   margin-bottom: 15px;
 }
-
 .status {
-  font-size: 1.1em;
+  font-size: 1.1em; /* 稍大字體 */
   color: #2d3748;
   margin-bottom: 8px;
 }
-
 .message {
   font-size: 1em;
   font-weight: bold;
-  min-height: 1.5em;
+  min-height: 25px; /* 避免跳動 */
   padding: 8px;
   border-radius: 4px;
-  background-color: #e9ecef;
+  background-color: #e9ecef; /* 預設訊息背景 */
 }
-
 .message.success {
-  color: var(--color-success-text);
-  background-color: var(--color-success-bg);
+  color: #2f855a; /* 成功訊息 (深綠色) */
+  background-color: #c6f6d5; /* 淺綠色背景 */
 }
-
 .message.error {
-  color: var(--color-error-text);
-  background-color: var(--color-error-bg);
+  color: #c53030; /* 錯誤訊息 (深紅色) */
+  background-color: #fed7d7; /* 淺紅色背景 */
 }
-.site-footer {
-  width: 100%;
-  background-color: #4a5568; /* 深灰藍底，和按鈕色呼應 */
-  color: #e2e8f0; /* 淺灰字色 */
-  padding: 15px 10px;
-  text-align: center;
-  font-size: 0.9em;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  user-select: none;
-}
-
-.site-footer .container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
+/* 響應式調整 */
 @media (max-width: 480px) {
   h1 {
     font-size: 1.5em;
@@ -169,11 +154,18 @@ button:focus-visible {
     gap: 5px;
   }
   .controls {
-    flex-direction: column;
+    flex-direction: column; /* 小螢幕時按鈕垂直排列 */
     align-items: center;
   }
   button {
     width: 80%;
     max-width: 250px;
+  }
+}
+@media (max-width: 480px) {
+  .controls {
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* 這行也保留 */
   }
 }
