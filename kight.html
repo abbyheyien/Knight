@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./knight.css" />
+    <title>騎士巡遊 (Knight's Tour)</title>
+  </head>
+  <body>
+    <h1>騎士巡遊 Knight's Tour</h1>
+
+    <div class="board-size-selector">
+      <label for="boardSizeSelect">選擇棋盤大小 (Board Size):</label>
+      <select id="boardSizeSelect">
+        <option value="5" selected>5x5</option>
+        <option value="6">6x6</option>
+        <option value="7">7x7</option>
+        <option value="8">8x8</option>
+      </select>
+    </div>
+
+    <div class="status-message-container">
+      <div class="status">已走步數 (Moves)：<span id="moveCount">0</span></div>
+      <div class="message" id="messageArea">請點擊棋盤選擇騎士的起始位置。</div>
+    </div>
+
+    <div class="board-container" id="board"></div>
+
+    <div class="controls">
+      <button id="resetButton">重新開始 (Reset)</button>
+      <button id="togglePossibleMovesButton">隱藏可走步數 (Hide Moves)</button>
+    </div>
+
+    <footer>
+      <div class="footer-copy">
+        <p>© 2025 Abby練習用的網站 !!!!!!!!!!</p>
+      </div>
+    </footer>
+
+    <script src="./knight.js"></script>
+  </body>
+</html>
